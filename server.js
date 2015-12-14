@@ -127,16 +127,21 @@ router.route('/jobs/:jeanmicheljarre')
 		}, function(err, job) {
 			if (err)
 				res.send(err);
-
 			res.json({ message: 'Successfully deleted' });
 		});//steeven
 	});
 
 	router.route('/companies')
 		.get(function(req, res) {
-				if(req.query.lolilol)
+				if(req.query.company)
 				{
-//steeven
+					var query = Job.find({});
+					query.where("company" , req.query.company);
+					query.exec(function(err, job) {
+						if (err)//steeven
+							res.send(err);
+						res.json(job);
+					});
 				}//steeven
 				else {
 					Job.aggregate([{$group : { _id : "$company", count : {$sum : 1} }}, {$sort : { count : -1 }}]).exec(function(err, job)
