@@ -171,6 +171,9 @@ for (var i = 1; i < 15; i++) {
 	pagesToScrape.push({ "url": url });
 }//steeven
 
+console.log('Start Scrapping...');
+console.log('Be patient... It takes a few seconds');
+
 async.map(pagesToScrape,function(opts, callback) {
 
 	request(opts, function(error, response, html){
@@ -255,7 +258,6 @@ async.map(pagesToScrape,function(opts, callback) {
 													}//steeven
 
 													dateString = year + "-" + month + "-" + dayString;
-													console.log(dateString);
 
 								job.date = Date.parse(dateString);
 						}
