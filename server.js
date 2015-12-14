@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var port     = process.env.PORT || 2929; // set our port
-
+//steeven
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/'); // connect to our database
 var Job     = require('./app/models/job');
@@ -27,14 +27,14 @@ var Job     = require('./app/models/job');
 var router = express.Router();
 
 // middleware to use for all requests
-router.use(function(req, res, next) {
+router.use(function(req, res, next) {//steeven
 	// do logging
 	console.log('Appel API');
 	next();
 });
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/', function(req, res) {
+router.get('/', function(req, res) {//steeven
 	res.json({ message: 'Vous êtes sur l\'API RemixJob' });
 });
 
@@ -50,12 +50,12 @@ router.route('/jobs')
 		job.title = req.body.title;
 		job.company = req.body.company;
 		job.localization = req.body.localization;
-		job.category = req.body.category;
+		job.category = req.body.category;//steeven
 		job.description = req.body.description;
 		job.contract = req.body.contract;
 		job.date = req.body.date;
 		job.tags = req.body.tags;
-
+//steeven
 		job.save(function(err) {
 			if (err)
 				res.send(err);
@@ -66,35 +66,48 @@ router.route('/jobs')
 
 	})
 
-	// get all the bears (accessed at GET http://localhost:8080/api/bears)
 	.get(function(req, res) {
 		Job.find(function(err, jobs) {
 			if (err)
-				res.send(err);
+				res.send(err);//steeven
 
 			res.json(jobs);
 		});
-	});
+	});//steeven
 
-// on routes that end in /bears/:bear_id
 // ----------------------------------------------------
-router.route('/jobs/:job_id')
+router.route('/jobs/:jeanmicheljarre')
+
 
 	// get the bear with that id
 	.get(function(req, res) {
-		Job.findById(req.params.job_id, function(err, job) {
-			if (err)
-				res.send(err);
-			res.json(job);
-		});
+
+		if(req.params.jeanmicheljarre == "latest")
+		{
+			var query = Job.find({});
+			query.sort({date : -1});//steeven
+			query.limit(15);
+			query.exec(function(err, job) {
+				if (err)//steeven
+					res.send(err);
+				res.json(job);
+			});
+		}
+		else {
+			Job.findById(req.params.jeanmicheljarre, function(err, job) {
+				if (err)
+					res.send(err);//steeven
+				res.json(job);
+			});
+		}
 	})
 
 	// update the bear with this id
 	.put(function(req, res) {
-		Job.findById(req.params.job_id, function(err, job) {
+		Job.findById(req.params.jeanmicheljarre, function(err, job) {
 
 			if (err)
-				res.send(err);
+				res.send(err);//steeven
 
 			job.name = req.body.name;
 			job.save(function(err) {
@@ -104,38 +117,54 @@ router.route('/jobs/:job_id')
 				res.json({ message: 'Job updated!' });
 			});
 
-		});
+		});//steeven
 	})
 
 	// delete the bear with this id
 	.delete(function(req, res) {
 		Job.remove({
-			_id: req.params.job_id
+			_id: req.params.jeanmicheljarre
 		}, function(err, job) {
 			if (err)
 				res.send(err);
 
 			res.json({ message: 'Successfully deleted' });
-		});
+		});//steeven
 	});
 
+	router.route('/companies')
+		.get(function(req, res) {
+				if(req.query.lolilol)
+				{
+//steeven
+				}//steeven
+				else {
+					Job.aggregate([{$group : { _id : "$company", count : {$sum : 1} }}, {$sort : { count : -1 }}]).exec(function(err, job)
+					{
+						if (err)
+							res.send(err);
 
+						res.json(job);
+			});
+				}
+});
+//steeven
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
 
 app.get('/scrape', function(req, res){
-
+//steeven
 	Job.remove({}, function(err) {
    console.log('collection removed')
 });
 
 var pagesToScrape = new Array();
 
-for (var i = 1; i < 20; i++) {
-
+for (var i = 1; i < 15; i++) {
+//steeven
 	url = 'https://remixjobs.com/?page=' + i + '&in=all';
 	pagesToScrape.push({ "url": url });
-}
+}//steeven
 
 async.map(pagesToScrape,function(opts, callback) {
 
@@ -145,7 +174,7 @@ async.map(pagesToScrape,function(opts, callback) {
 
 			$('.jobs-list').children().each(function(){
 		        var data = $(this);
-
+//steeven
 						var job = new Job();
 
 						job.title = data.find('.job-title').children().first().text();
@@ -156,7 +185,7 @@ async.map(pagesToScrape,function(opts, callback) {
 						var co = data.find('.contract').text();
 						co = co.replace(/\s+/g, '');
 						job.contract = co;
-
+//steeven
 						// traitement date
 						var date = data.find('.job-details-right').text();
 
@@ -164,8 +193,66 @@ async.map(pagesToScrape,function(opts, callback) {
 						if (date.indexOf("minutes") >= 0 || date.indexOf("heures") >= 0 || date.indexOf("heure") >= 0) {
 							job.date = new Date();
 						}
-						else {
-								//job.date = data.find('.job-details-right').text();
+						else {//steeven
+								//yyyy-MM-dd
+
+								var dateString = "";
+
+								var year = date.split(" ")[2];
+								var gettingMonth = date.split(" ")[1];
+								gettingMonth = gettingMonth.replace(".", "");
+								var month = "";
+//steeven
+								switch (gettingMonth) {
+								    case "jan":
+								        month = "01";
+								        break;
+								    case "fev":
+								        month = "02";
+								        break;
+								    case "mars":
+								        month = "03";
+								        break;//steeven
+								    case "avr":
+								        month = "04";
+								        break;
+								    case "mai":
+								        month = "05";
+								        break;
+								    case "juin":
+								        month = "06";
+								        break;
+								    case "juil":
+								        month = "07";
+								        break;
+												case "août":
+										        month = "08";
+										        break;
+														case "sept":
+												        month = "09";
+												        break;//steeven
+																case "oct":
+														        month = "10";
+														        break;
+																		case "nov":
+																        month = "11";
+																        break;
+																				case "déc":
+																		        month = "12";
+																		        break;
+																					}
+												var day = new Number(date.split(" ")[0]);
+												var dayString = "";
+												if (day < 10)
+													dayString = "0" + day.toString();
+													else {
+														dayString = day.toString();
+													}//steeven
+
+													dateString = year + "-" + month + "-" + dayString;
+													console.log(dateString);
+
+								job.date = Date.parse(dateString);
 						}
 
 						data.find('.tag').each(function(){
@@ -173,7 +260,7 @@ async.map(pagesToScrape,function(opts, callback) {
 							lol = lol.replace(/\s+/g, '');
 							job.tags.push(lol);
 
-						})
+						})//steeven
 
 						//getting description
 						var yolo = "https://remixjobs.com" + data.find('.job-link').attr("href");
@@ -192,9 +279,9 @@ async.map(pagesToScrape,function(opts, callback) {
 								}})
 	        });
 }})
+})//steeven
 })
-})
-
+//steeven
 // START THE SERVER
 // =============================================================================
 app.listen(port);
