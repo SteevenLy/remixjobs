@@ -13,4 +13,5 @@ Just follow this link with the right port 2929 open on your localhost
 
 ## API available
 
-*Get all /Jobs [http://localhost:2929/api/jobs](http://localhost:2929/api/jobs)
+- Get all /JOBS [http://localhost:2929/api/jobs](http://localhost:2929/api/jobs)
+- Get 15 latest /JOBS/LATEST [http://localhost:2929/api/jobs/latest](http://localhost:2929/api/jobs/latest)
