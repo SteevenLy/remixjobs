@@ -8,9 +8,6 @@ Thank you for reading me!
 
 ## How to scrap ?
 
-<<<<<<< .merge_file_a16772
-http://localhost:2929/scrape
-=======
 Just follow this link with the right port 2929 open on your localhost
 [http://localhost:2929/scrape](http://localhost:2929/scrape)
 
@@ -19,4 +16,4 @@ Just follow this link with the right port 2929 open on your localhost
 - Get all /jobs [http://localhost:2929/api/jobs](http://localhost:2929/api/jobs)
 - Get 15 latest /jobs/latest [http://localhost:2929/api/jobs/latest](http://localhost:2929/api/jobs/latest)
 - Get companies /companies [http://localhost:2929/api/companies](http://localhost:2929/api/companies)
->>>>>>> .merge_file_a15864
+- Get jobs from one company /companies?company=YOURCOMPANY [http://localhost:2929/api/companies?company=YOURCOMPANY](http://localhost:2929/api/companies?company=YOURCOMPANY)
